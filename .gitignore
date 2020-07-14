@@ -77,3 +77,6 @@ typings/
 
 # downloaded extensions
 extensions
+
+# lib
+lib
