@@ -142,16 +142,17 @@ class Extension {
 async function generate() {
   await fse.emptyDir(targetDir)
 
+  await fse.copyFile(
+    path.resolve(__dirname, './loader.js'),
+    path.resolve(targetDir, './loader.js')
+  )
+
   const extensionNames = await promisify(fs.readdir)(extensionsDir)
-
-  const result = []
-
   for (const extName of extensionNames) {
     // read extension package.json
     const extPath = path.resolve(extensionsDir, extName)
     const extension = new Extension(extPath)
     await extension.run()
-    result.push(extension.toJSON())
   }
 }
 
