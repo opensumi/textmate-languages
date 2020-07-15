@@ -11,6 +11,7 @@ const entryTemplate = require('./entry-template')
 
 const extensionsDir = path.resolve(__dirname, '../extensions')
 const targetDir = path.resolve(__dirname, '../lib')
+const targetEsDir = path.resolve(__dirname, '../es')
 
 templateSettings.escape = false
 
@@ -27,31 +28,43 @@ class Extension {
     const extPkgJson = await fse.readJSON(
       path.resolve(this.extPath, './package.json')
     )
-    // create a folder for ext
-    this.extOutDir = path.join(targetDir, extPkgJson.name)
-    await fse.ensureDir(this.extOutDir)
-    // handle langauges/grammars
-    await this.collectLanguages(extPkgJson.contributes)
-    await this.collectGrammars(extPkgJson.contributes)
-    await this.writeEntry()
+    await this.contributes(extPkgJson, targetDir, false)
+    await this.contributes(extPkgJson, targetEsDir, true)
   }
 
-  async writeEntry() {
+  async contributes(extDesc, outDir, esMode = false) {
+    // create a folder for ext
+    const extOutDir = path.join(outDir, extDesc.name)
+    await fse.ensureDir(extOutDir)
+    // handle langauges/grammars
+    await this.collectLanguages(extDesc.contributes, extOutDir)
+    await this.collectGrammars(extDesc.contributes, extOutDir)
+    await this.writeEntry(extOutDir, esMode)
+  }
+
+  async writeEntry(extOutDir, esMode) {
     // compile entry template
     const data = this.toJSON()
     const compiled = template(entryTemplate)
+    const requireKeyword = esMode ? 'import' : 'require'
     /**
      * dirty works for replace path to `require({path})`
      * match `"configuration": "./language-configuration.json"`
      * and then replace it with require
+     * use `non-greedy mode`
      */
     const languageStr = JSON.stringify(data.languages).replace(
-      /"configuration":\s*(".+?\.json")/g,
-      'configuration:require($1)'
+      /"configuration":\s*(".+?.json?")/g,
+      `configuration:${requireKeyword}($1)`
     )
+    /**
+     * 处理以下字符串，因为有 tmLanguage 后缀，因此将 `.json` 设置为可选匹配项
+     * `"path": "./syntaxes/Regular Expressions (JavaScript).tmLanguage"`
+     * `"path": "./syntaxes/JavaScript.tmLanguage.json"`
+     */
     const grammarStr = JSON.stringify(data.grammars).replace(
-      /"path":\s*(".+?\.json")/g,
-      'path:require($1)'
+      /"path":\s*(".+?[.json]?")/g,
+      `path:${requireKeyword}($1)`
     )
 
     const content = compiled({
@@ -60,7 +73,7 @@ class Extension {
     })
 
     await fse.writeFile(
-      path.resolve(this.extOutDir, 'index.js'),
+      path.resolve(extOutDir, 'index.js'),
       // format by prettier
       prettier.format(content, require('../.prettierrc')),
       'utf8'
@@ -68,7 +81,7 @@ class Extension {
   }
 
   // handle monaco languages#configuration
-  async collectLanguages(contributes = {}) {
+  async collectLanguages(contributes = {}, extOutDir) {
     const { languages } = contributes
     if (!Array.isArray(languages) || !languages.length) {
       console.warn('no contributes#languages')
@@ -88,7 +101,7 @@ class Extension {
 
           return fse.copyFile(
             path.resolve(this.extPath, language.configuration),
-            path.resolve(this.extOutDir, targetFilename)
+            path.resolve(extOutDir, targetFilename)
           )
         }
         // 收集 language
@@ -99,7 +112,7 @@ class Extension {
   }
 
   // handle textmate grammars#path
-  async collectGrammars(contributes = {}) {
+  async collectGrammars(contributes = {}, extOutDir) {
     const { grammars } = contributes
     if (!Array.isArray(grammars) || !grammars.length) {
       console.warn('no contributes#grammars')
@@ -107,7 +120,7 @@ class Extension {
     }
 
     // ensure dir for tmLanguage
-    const grammarDir = path.resolve(this.extOutDir, './syntaxes')
+    const grammarDir = path.resolve(extOutDir, './syntaxes')
     await fse.ensureDir(grammarDir)
 
     await bluebird.map(
@@ -142,9 +155,16 @@ class Extension {
 async function generate() {
   await fse.emptyDir(targetDir)
 
+  // copy `loader.js`
   await fse.copyFile(
-    path.resolve(__dirname, './loader.js'),
+    path.resolve(__dirname, './loaders/loader.js'),
     path.resolve(targetDir, './loader.js')
+  )
+
+  // copy `loader-es.js`
+  await fse.copyFile(
+    path.resolve(__dirname, './loaders/loader-es.js'),
+    path.resolve(targetEsDir, './loader.js')
   )
 
   const extensionNames = await promisify(fs.readdir)(extensionsDir)
