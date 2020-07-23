@@ -153,26 +153,32 @@ class Extension {
 }
 
 async function generate() {
-  await fse.emptyDir(targetDir)
-
-  // copy `loader.js`
-  await fse.copyFile(
-    path.resolve(__dirname, './loaders/loader.js'),
-    path.resolve(targetDir, './loader.js')
-  )
-
-  // copy `loader-es.js`
-  await fse.copyFile(
-    path.resolve(__dirname, './loaders/loader-es.js'),
-    path.resolve(targetEsDir, './loader.js')
-  )
-
-  const extensionNames = await promisify(fs.readdir)(extensionsDir)
-  for (const extName of extensionNames) {
-    // read extension package.json
-    const extPath = path.resolve(extensionsDir, extName)
-    const extension = new Extension(extPath)
-    await extension.run()
+  try {
+    for (const dir of [targetDir, targetEsDir]) {
+      await fse.emptyDir(dir)
+    }
+    // copy `loader.js`
+    await fse.copyFile(
+      path.resolve(__dirname, './loaders/loader.js'),
+      path.resolve(targetDir, './loader.js')
+    )
+  
+    // copy `loader-es.js`
+    await fse.copyFile(
+      path.resolve(__dirname, './loaders/loader-es.js'),
+      path.resolve(targetEsDir, './loader.js')
+    )
+  
+    const extensionNames = await promisify(fs.readdir)(extensionsDir)
+    for (const extName of extensionNames) {
+      // read extension package.json
+      const extPath = path.resolve(extensionsDir, extName)
+      const extension = new Extension(extPath)
+      await extension.run()
+    }
+  } catch (err) {
+    console.log(err)
+    process.exit(128)
   }
 }
 
