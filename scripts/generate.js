@@ -100,7 +100,7 @@ class Extension {
             configuration: './' + targetFilename.trim()
           })
 
-          return fse.copyFile(
+          return this.copyFileWithoutComments(
             path.resolve(this.extPath, language.configuration),
             path.resolve(extOutDir, targetFilename)
           )
@@ -153,7 +153,8 @@ class Extension {
       return fse.copyFile(from, to)
     }
     const jsonContent = await promisify(fs.readFile)(from, { encoding: 'utf8' })
-    await promisify(fs.writeFile)(to, jsonContent, { encoding: 'utf8' })
+    const newContent = stripJsonComments(jsonContent, { whitespace: false })
+    await promisify(fs.writeFile)(to, newContent, { encoding: 'utf8' })
   }
 
   toJSON() {
