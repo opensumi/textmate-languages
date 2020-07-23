@@ -96,7 +96,7 @@ class Extension {
           // 收集 language 并将 configration#string 转成 require 语法
           this.desc.languages.push({
             ...language,
-            configuration: path.join('./', targetFilename)
+            configuration: './' + targetFilename.trim()
           })
 
           return fse.copyFile(
@@ -132,7 +132,7 @@ class Extension {
           // 收集 grammar 并将 path#string 转成 require 语法
           this.desc.grammars.push({
             ...grammar,
-            path: path.join('./syntaxes/', targetFilename)
+            path: './syntaxes/' + targetFilename.trim()
           })
           return fse.copyFile(
             path.resolve(this.extPath, grammar.path),
