@@ -10,10 +10,6 @@
         "version": "1.0.0"
       },
       {
-        "name": "javascript",
-        "version": "1.0.0"
-      },
-      {
         "name": "json",
         "version": "1.0.0"
       },
@@ -39,6 +35,10 @@
       }
     ],
     "kaitian": [
+      {
+        "name": "javascript",
+        "version": "1.0.0-patch.1"
+      },
       {
         "name": "typescript-basics",
         "version": "1.37.2-patch.1"

@@ -6,6 +6,7 @@ const { template, templateSettings } = require('lodash')
 const fse = require('fs-extra')
 const prettier = require('prettier')
 const bluebird = require('bluebird')
+const stripJsonComments = require('strip-json-comments')
 
 const entryTemplate = require('./entry-template')
 
@@ -134,7 +135,7 @@ class Extension {
             ...grammar,
             path: './syntaxes/' + targetFilename.trim()
           })
-          return fse.copyFile(
+          return this.copyFileWithoutComments(
             path.resolve(this.extPath, grammar.path),
             path.resolve(grammarDir, targetFilename)
           )
@@ -144,6 +145,15 @@ class Extension {
       },
       { concurrency: 3 }
     )
+  }
+
+  async copyFileWithoutComments(from, to, stripComment = true) {
+    if (path.extname(from) !== '.json') {
+      console.warn(`${from} is not a json file`)
+      return fse.copyFile(from, to)
+    }
+    const jsonContent = await promisify(fs.readFile)(from, { encoding: 'utf8' })
+    await promisify(fs.writeFile)(to, jsonContent, { encoding: 'utf8' })
   }
 
   toJSON() {

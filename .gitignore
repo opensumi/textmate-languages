@@ -81,3 +81,5 @@ extensions
 # lib
 lib
 es
+
+.DS_Store
