@@ -13,14 +13,14 @@
 ### 异步注册
 * kaitian 中注册 languages/grammars 都是异步注册的
 
-### resolvedContent 字段
-* 为了跟原本插件的 contribute 的 `path/configuration` 字段区分开，统一使用 resolvedContent 挂载原本的 json file 中的内容，如
+### resovledConfiguration 字段
+* 为了跟原本插件的 contribute 的 `path/configuration` 字段区分开，统一使用 resovledConfiguration 挂载原本的 json file 中的内容，如
 
-* `"configuration": "./language-configuration.json"` --> `"resolvedContent": require('./language-configuration.json')`
-* `"path": "./syntaxes/JavaScript.tmLanguage.json"` --> `"resolvedContent": require('./syntaxes/JavaScript.tmLanguage.json')
+* `"configuration": "./language-configuration.json"` --> `"resovledConfiguration": require('./language-configuration.json')`
+* `"path": "./syntaxes/JavaScript.tmLanguage.json"` --> `"resovledConfiguration": require('./syntaxes/JavaScript.tmLanguage.json')
 
 ### tmLanguage 文件
-由于 require 语法导致在 webpack 中需要额外添加 raw-loader 去处理 tmLanguage 文件，且会导致 resolvedContent 的内容格式不统一，因此目前都通过 fork vscode 插件 [TextMate Languages] 将 tmLanguage 转成 json
+由于 require 语法导致在 webpack 中需要额外添加 raw-loader 去处理 tmLanguage 文件，且会导致 resovledConfiguration 的内容格式不统一，因此目前都通过 fork vscode 插件 [TextMate Languages] 将 tmLanguage 转成 json
 
 目前已经被 fork 过的语言插件列表如下:
 * javascript

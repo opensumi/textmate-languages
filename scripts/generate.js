@@ -16,6 +16,8 @@ const targetEsDir = path.resolve(__dirname, '../es')
 
 templateSettings.escape = false
 
+const ResolvedConfigFiled = 'resolvedConfiguration';
+
 class Extension {
   constructor(extPath) {
     this.extPath = extPath
@@ -56,7 +58,7 @@ class Extension {
      */
     const languageStr = JSON.stringify(data.languages).replace(
       /"configuration":\s*(".+?.json?")/g,
-      `resolvedContent:${requireKeyword}($1)`
+      `${ResolvedConfigFiled}:${requireKeyword}($1)`
     )
     /**
      * 处理以下字符串，因为有 tmLanguage 后缀，因此将 `.json` 设置为可选匹配项
@@ -68,7 +70,7 @@ class Extension {
      */
     const grammarStr = JSON.stringify(data.grammars).replace(
       /"path":\s*(".+?[.json]?")/g,
-      `resolvedContent:${requireKeyword}($1)`
+      `${ResolvedConfigFiled}:${requireKeyword}($1)`
     )
 
     const content = compiled({
