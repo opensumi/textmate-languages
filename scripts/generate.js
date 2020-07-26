@@ -56,16 +56,19 @@ class Extension {
      */
     const languageStr = JSON.stringify(data.languages).replace(
       /"configuration":\s*(".+?.json?")/g,
-      `configuration:${requireKeyword}($1)`
+      `resolvedContent:${requireKeyword}($1)`
     )
     /**
      * 处理以下字符串，因为有 tmLanguage 后缀，因此将 `.json` 设置为可选匹配项
-     * `"path": "./syntaxes/Regular Expressions (JavaScript).tmLanguage"`
      * `"path": "./syntaxes/JavaScript.tmLanguage.json"`
+     * <del>`"path": "./syntaxes/Regular Expressions (JavaScript).tmLanguage"`</del>
+     * 由于 require 语法导致在 webpack 中需要额外添加 raw-loader 去处理 tmLanguage 文件
+     * 且会导致 resolvedContent 的内容格式不统一
+     * 因此目前都通过 fork vscode 插件 [TextMate Languages] 将 tmLanguage 转成 json
      */
     const grammarStr = JSON.stringify(data.grammars).replace(
       /"path":\s*(".+?[.json]?")/g,
-      `path:${requireKeyword}($1)`
+      `resolvedContent:${requireKeyword}($1)`
     )
 
     const content = compiled({
