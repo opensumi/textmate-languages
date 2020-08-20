@@ -19,10 +19,7 @@ const extensionInstaller = new ExtensionInstaller({
 })
 
 // vscode extension 的 tar 包 oss 地址
-const { extensions } = require(path.resolve(
-  __dirname,
-  '../config/extensions.json'
-))
+const { extensions } = require('../config/extensions')
 
 const downloadVscodeExtensions = async () => {
   console.log('清空 extensions 目录：%s', targetDir)
