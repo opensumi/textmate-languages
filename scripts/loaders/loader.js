@@ -1,12 +1,12 @@
 module.exports = (registerLanguage, registerGrammar) => (
   languages = [],
-  grammers = []
+  grammars = []
 ) => {
   for (const language of languages) {
     registerLanguage(language)
   }
 
-  for (const grammar of grammers) {
+  for (const grammar of grammars) {
     registerGrammar(grammar)
   }
 }
