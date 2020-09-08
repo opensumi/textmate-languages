@@ -1,12 +1,9 @@
-export default async (registerLanguage, registerGrammar) => (
+export default (registerLanguage, registerGrammar) => (
   languages = [],
   grammars = []
 ) => {
-  for (const language of languages) {
-    await registerLanguage(language)
-  }
-
-  for (const grammar of grammars) {
-    await registerGrammar(grammar)
-  }
+  return [
+    ...languages.map(language => registerLanguage(language)),
+    ...grammars.map(grammar => registerGrammar(grammar)),
+  ];
 }
