@@ -17,7 +17,8 @@
   "license": "ISC",
   "files": [
     "lib",
-    "es"
+    "es",
+    "index.d.ts"
   ],
   "typings": "index.d.ts",
   "publishConfig": {
