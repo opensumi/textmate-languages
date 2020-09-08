@@ -8,7 +8,8 @@ const prettier = require('prettier')
 const bluebird = require('bluebird')
 const stripJsonComments = require('strip-json-comments')
 
-const entryTemplate = require('./entry-template')
+const entryTemplate = require('./entry-template/entry-template')
+const entryTemplateEs = require('./entry-template/entry-template-es')
 
 const extensionsDir = path.resolve(__dirname, '../extensions')
 const targetDir = path.resolve(__dirname, '../lib')
@@ -48,7 +49,7 @@ class Extension {
   async writeEntry(extOutDir, esMode) {
     // compile entry template
     const data = this.toJSON()
-    const compiled = template(entryTemplate)
+    const compiled = template(esMode ? entryTemplateEs : entryTemplate)
     const requireKeyword = esMode ? 'import' : 'require'
     /**
      * dirty works for replace path to `require({path})`

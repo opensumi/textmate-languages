@@ -1,12 +1,12 @@
-module.exports = (registerLanguage, registerGrammar) => (
+module.exports = async (registerLanguage, registerGrammar) => (
   languages = [],
   grammars = []
 ) => {
   for (const language of languages) {
-    registerLanguage(language)
+    await registerLanguage(language)
   }
 
   for (const grammar of grammars) {
-    registerGrammar(grammar)
+    await registerGrammar(grammar)
   }
 }
