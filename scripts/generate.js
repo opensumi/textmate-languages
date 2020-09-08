@@ -8,7 +8,8 @@ const prettier = require('prettier')
 const bluebird = require('bluebird')
 const stripJsonComments = require('strip-json-comments')
 
-const entryTemplate = require('./entry-template')
+const entryTemplate = require('./entry-template/entry-template')
+const entryTemplateEs = require('./entry-template/entry-template-es')
 
 const extensionsDir = path.resolve(__dirname, '../extensions')
 const targetDir = path.resolve(__dirname, '../lib')
@@ -39,7 +40,7 @@ class Extension {
     // create a folder for ext
     const extOutDir = path.join(outDir, extDesc.name)
     await fse.ensureDir(extOutDir)
-    // handle langauges/grammars
+    // handle languages/grammars
     await this.collectLanguages(extDesc.contributes, extOutDir)
     await this.collectGrammars(extDesc.contributes, extOutDir)
     await this.writeEntry(extOutDir, esMode)
@@ -48,7 +49,7 @@ class Extension {
   async writeEntry(extOutDir, esMode) {
     // compile entry template
     const data = this.toJSON()
-    const compiled = template(entryTemplate)
+    const compiled = template(esMode ? entryTemplateEs : entryTemplate)
     const requireKeyword = esMode ? 'import' : 'require'
     /**
      * dirty works for replace path to `require({path})`
@@ -99,7 +100,7 @@ class Extension {
       language => {
         if (language.configuration) {
           const targetFilename = path.basename(language.configuration)
-          // 收集 language 并将 configration#string 转成 require 语法
+          // 收集 language 并将 configuration#string 转成 require 语法
           this.desc.languages.push({
             ...language,
             configuration: './' + targetFilename.trim()
@@ -154,8 +155,8 @@ class Extension {
 
   async copyFileWithoutComments(from, to, stripComment = true) {
     if (path.extname(from) !== '.json') {
-      console.warn(`${from} is not a json file`)
-      return fse.copyFile(from, to)
+      console.warn(`${from} is not a json file skipped`)
+      return
     }
     const jsonContent = await promisify(fs.readFile)(from, { encoding: 'utf8' })
     const newContent = stripJsonComments(jsonContent, { whitespace: false })
@@ -178,13 +179,13 @@ async function generate() {
       path.resolve(__dirname, './loaders/loader.js'),
       path.resolve(targetDir, './loader.js')
     )
-  
+
     // copy `loader-es.js`
     await fse.copyFile(
       path.resolve(__dirname, './loaders/loader-es.js'),
       path.resolve(targetEsDir, './loader.js')
     )
-  
+
     const extensionNames = await promisify(fs.readdir)(extensionsDir)
     for (const extName of extensionNames) {
       // read extension package.json

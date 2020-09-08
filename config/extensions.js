@@ -64,7 +64,7 @@ module.exports = {
       // "html",
       "ini",
       // "java",
-      "javascript",
+      // "javascript",
       // "json",
       // "less",
       "log",
