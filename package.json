@@ -2,7 +2,8 @@
   "name": "@ali/kaitian-textmate-languages",
   "version": "2.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "lib/loader.js",
+  "module": "es/loader.js",
   "scripts": {
     "download": "node scripts/update-extensions.js",
     "generate": "rm -rf lib && node scripts/generate.js",
