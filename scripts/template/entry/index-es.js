@@ -1,5 +1,5 @@
 module.exports = `
-const loader = require('../loader')
+import loader from '../loader'
 
 export default (registerLanguage, registerGrammar) => {
   const languages = <%= languages %>
