@@ -1,11 +1,4 @@
-declare module '@ali/kaitian-textmate-languages' {
-  export type loadLanguageAndGrammar = (
-    registerLanguage: (languageContribution: any, extPath: any) => Promise<void>,
-    registerGrammar: (grammarContribution: any, extPath: any) => Promise<void>,
-  ) => Promise<void>[];
-}
-
-interface LanguageDesc {
+interface ILanguageDesc {
   id: string;
   extensions: string[];
   aliases: string[];
@@ -18,12 +11,31 @@ interface LanguageDesc {
   extensionPackageName?: string;
 }
 
+declare module '@ali/kaitian-textmate-languages' {
+  export type loadLanguageAndGrammar = (
+    registerLanguage: (languageContribution: any, extPath: any) => Promise<void>,
+    registerGrammar: (grammarContribution: any, extPath: any) => Promise<void>,
+  ) => Promise<void>[];
+
+  export type LanguageDesc = ILanguageDesc
+}
+
 declare module '@ali/kaitian-textmate-languages/es/utils' {
-  export function getLanguageIdByExtnameAndFilename(extname: string, filename?: string): LanguageDesc | undefined;
+  export function getLanguageByExtnameAndFilename(extname: string, filename?: string): ILanguageDesc | undefined;
+  export function getLanguageById(languageId: string): ILanguageDesc | undefined;
+  /**
+   * @deprecated please use `getLanguageById` instead
+   * @param languageId
+   */
   export function hasLanguageId(languageId: string): boolean;
 }
 
 declare module '@ali/kaitian-textmate-languages/lib/utils' {
-  export function getLanguageIdByExtnameAndFilename(extname: string, filename?: string): LanguageDesc | undefined;
+  export function getLanguageByExtnameAndFilename(extname: string, filename?: string): ILanguageDesc | undefined;
+  export function getLanguageById(languageId: string): ILanguageDesc | undefined;
+  /**
+   * @deprecated please use `getLanguageById` instead
+   * @param languageId
+   */
   export function hasLanguageId(languageId: string): boolean;
 }
