@@ -3,6 +3,7 @@ const path = require('path')
 const { promisify } = require('util')
 
 const { template, templateSettings } = require('lodash')
+const plist = require('plist')
 const fse = require('fs-extra')
 const prettier = require('prettier')
 const bluebird = require('bluebird')
@@ -65,20 +66,26 @@ class Extension {
      * use `non-greedy mode`
      */
     const languageStr = JSON.stringify(data.languages).replace(
-      /"configuration":\s*(".+?.json?")/g,
+      /"configuration":\s*(".+?(?:.json)")/g,
       `${ResolvedConfigFiled}:${requireKeyword}($1)`
     )
     /**
      * 处理以下字符串，因为有 tmLanguage 后缀，因此将 `.json` 设置为可选匹配项
      * `"path": "./syntaxes/JavaScript.tmLanguage.json"`
-     * <del>`"path": "./syntaxes/Regular Expressions (JavaScript).tmLanguage"`</del>
+     * `"path": "./syntaxes/Regular Expressions (JavaScript).tmLanguage"`
      * 由于 require 语法导致在 webpack 中需要额外添加 raw-loader 去处理 tmLanguage 文件
      * 且会导致 resolvedContent 的内容格式不统一
-     * 因此目前都通过 fork vscode 插件 [TextMate Languages] 将 tmLanguage 转成 json
+     * <del>因此目前都通过 fork vscode 插件 [TextMate Languages] 将 tmLanguage 转成 json</del>
+     * 已使用 `plist` 直接将 tmLanguage 文件转换成 json 格式
      */
     const grammarStr = JSON.stringify(data.grammars).replace(
-      /"path":\s*(".+?[.json]?")/g,
-      `${ResolvedConfigFiled}:${requireKeyword}($1)`
+      // 为了处理 tmLanguage 转 json 的问题，将结尾的 `"` 号放在捕获分组之外了
+      /"path":\s*(".+?(\.json|\.tmLanguage?))"/g,
+      (_, p1, p2) => {
+        // 下方 this.copyTextmateFiles 会处理 tmLanguage 转 json 的逻辑
+        const suffix = p2 === '.tmLanguage' ? p1 + '.json' : p1
+        return `${ResolvedConfigFiled}:${requireKeyword}(${suffix}")`
+      }
     )
 
     const content = compiled({
@@ -116,7 +123,7 @@ class Extension {
           configuration: './' + targetFilename.trim()
         })
 
-        return this.copyFileWithoutComments(
+        return this.copyTextmateFiles(
           path.resolve(this.extPath, language.configuration),
           path.resolve(extOutDir, targetFilename)
         )
@@ -156,7 +163,7 @@ class Extension {
             ...grammar,
             path: './syntaxes/' + targetFilename.trim()
           })
-          return this.copyFileWithoutComments(
+          return this.copyTextmateFiles(
             path.resolve(this.extPath, grammar.path),
             path.resolve(grammarDir, targetFilename)
           )
@@ -168,14 +175,45 @@ class Extension {
     )
   }
 
-  async copyFileWithoutComments(from, to, stripComment = true) {
+  async copyTextmateFiles(from, to) {
+    const ext = path.extname(from);
+    switch (ext) {
+      case '.json':
+        this.copyJSONFileWithoutComments(from, to);
+        break;
+      case '.tmLanguage':
+        this.convertTmFileToJson(from, to);
+        break;        
+    }
+  }
+
+  async copyJSONFileWithoutComments(from, to) {
     if (path.extname(from) !== '.json') {
       console.warn(`${from} is not a json file skipped`)
       return
     }
-    const jsonContent = await promisify(fs.readFile)(from, { encoding: 'utf8' })
-    const newContent = stripJsonComments(jsonContent, { whitespace: false })
-    await promisify(fs.writeFile)(to, newContent, { encoding: 'utf8' })
+    let jsonContent = await promisify(fs.readFile)(from, { encoding: 'utf8' })
+    jsonContent = stripJsonComments(jsonContent, { whitespace: false })
+    await promisify(fs.writeFile)(to, jsonContent, { encoding: 'utf8' })
+  }
+
+  async convertTmFileToJson(from, to) {
+    if (path.extname(from) !== '.tmLanguage') {
+      return
+    }
+
+    let pListContent = await promisify(fs.readFile)(from, { encoding: 'utf8' })
+    try {
+      const plistDesc = plist.parse(pListContent)
+      pListContent = JSON.stringify(plistDesc, null, 2)
+    } catch (error) {
+      console.log(`Parse error for: ${from}`)
+      console.error(error)
+    }
+
+    // 将目标文件转换成 json 格式
+    to = to + '.json'
+    await promisify(fs.writeFile)(to, pListContent, { encoding: 'utf8' })
   }
 
   toJSON() {

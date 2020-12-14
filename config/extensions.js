@@ -36,16 +36,36 @@ module.exports = {
       {
         "name": "python-basic",
         "version": "1.0.0"
-      }
+      },
+      {
+        "name": "vue",
+        "version": "0.1.5"
+      },
+      {
+        "name": "acss",
+        "version": "0.0.2"
+      },
+      {
+        "name": "schema",
+        "version": "0.0.1"
+      },
+      {
+        "name": "velocity",
+        "version": "0.7.1"
+      },
+      {
+        "name": "vscode-proto3",
+        "version": "0.3.0"
+      },
+      {
+        "name": "javascript",
+        "version": "1.0.0"
+      },
     ],
     "kaitian": [
       {
-        "name": "javascript",
-        "version": "1.0.0-patch.1"
-      },
-      {
         "name": "typescript-basics",
-        "version": "1.37.2-patch.1"
+        "version": "1.51.1-patch.1"
       }
     ],
     "AONE-IDE": [
