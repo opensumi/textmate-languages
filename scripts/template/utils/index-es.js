@@ -7,10 +7,13 @@ import languageList from './language-list'
  */
 export const getLanguageByExtnameAndFilename = (extname, filename) => {
   // 先用 filename 去查找
-  let result = languageList.find(
-    (language) =>
-      Array.isArray(language.filenames) && language.filenames.includes(filename)
-  )
+  let result
+  if (filename) {
+    result = languageList.find(
+      (language) =>
+        Array.isArray(language.filenames) && language.filenames.includes(filename)
+    )
+  }
   if (!result) {
     result = languageList.find(
       (language) =>
