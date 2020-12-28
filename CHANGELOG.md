@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.3.1](https://gitlab.alibaba-inc.com/kaitian/textmate-languages/compare/v2.3.0...v2.3.1) (2020-12-28)
+
+
+### Bug Fixes
+
+* filename is undefined getLanguageByExtnameAndFilename ([b1404d6](https://gitlab.alibaba-inc.com/kaitian/textmate-languages/commit/b1404d64ba30bbe459359adf023b30127a03a62f))
+
 ## [2.3.0](https://gitlab.alibaba-inc.com/kaitian/textmate-languages/compare/v2.3.0-beta.0...v2.3.0) (2020-12-14)
 
 ## [2.3.0-beta.0](https://gitlab.alibaba-inc.com/kaitian/textmate-languages/compare/v2.2.0...v2.3.0-beta.0) (2020-12-11)
