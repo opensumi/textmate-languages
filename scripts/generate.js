@@ -183,7 +183,7 @@ class Extension {
         break;
       case '.tmLanguage':
         this.convertTmFileToJson(from, to);
-        break;        
+        break;
     }
   }
 
@@ -194,6 +194,11 @@ class Extension {
     }
     let jsonContent = await promisify(fs.readFile)(from, { encoding: 'utf8' })
     jsonContent = stripJsonComments(jsonContent, { whitespace: false })
+    // replace trailing comma
+    jsonContent = jsonContent.replace(
+      /(?<=(true|false|null|["\d}\]])\s*),(?=\s*[}\]])/g,
+      ''
+    )
     await promisify(fs.writeFile)(to, jsonContent, { encoding: 'utf8' })
   }
 
