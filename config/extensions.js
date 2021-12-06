@@ -1,3 +1,46 @@
+const VSCODE_BUILTIN_EXTENSIONS = [
+  'bat',
+  'clojure',
+  'coffeescript',
+  'cpp',
+  'csharp',
+  'css',
+  'docker',
+  'fsharp',
+  'go',
+  'groovy',
+  'handlebars',
+  'hlsl',
+  'html',
+  'ini',
+  'java',
+  'javascript',
+  'json',
+  'less',
+  'log',
+  'lua',
+  'make',
+  'markdown-basics',
+  'objective-c',
+  'perl',
+  'php',
+  'powershell',
+  'pug',
+  'python',
+  'razor',
+  'ruby',
+  'rust',
+  'scss',
+  'shaderlab',
+  'shellscript',
+  'sql',
+  'swift',
+  'typescript',
+  'vb',
+  'xml',
+  'yaml'
+]
+
 module.exports = {
   extensions: {
     vscode: [
@@ -22,53 +65,16 @@ module.exports = {
         version: '0.3.0'
       },
       {
-        name: 'typescript-basics',
-        version: '1.60.0'
+        name: 'Kotlin',
+        version: '1.7.1'
+      },
+      {
+        name: 'solidity',
+        version: '0.0.125'
       }
     ].concat(
-      [
-        'bat',
-        'clojure',
-        'coffeescript',
-        'cpp',
-        'csharp',
-        'css',
-        'docker',
-        'fsharp',
-        'go',
-        'groovy',
-        'handlebars',
-        'hlsl',
-        'html',
-        'ini',
-        'java',
-        'javascript',
-        'json',
-        'less',
-        'log',
-        'lua',
-        'make',
-        'markdown-basics',
-        'objective-c',
-        'perl',
-        'php',
-        'powershell',
-        'pug',
-        'python',
-        'razor',
-        'ruby',
-        'rust',
-        'scss',
-        'shaderlab',
-        'shellscript',
-        'sql',
-        'swift',
-        'vb',
-        'xml',
-        'yaml'
-      ].map(name => ({
-        name,
-        version: '1.55.2'
+      VSCODE_BUILTIN_EXTENSIONS.map(name => ({
+        name
       }))
     )
   }
