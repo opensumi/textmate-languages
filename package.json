@@ -1,6 +1,6 @@
 {
   "name": "@opensumi/textmate-languages",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "",
   "main": "lib/loader.js",
   "module": "es/loader.js",
@@ -8,13 +8,13 @@
     "download": "node scripts/update-extensions.js",
     "generate": "rm -rf lib && node scripts/generate.js",
     "update": "npm run download && npm run generate",
-    "pub": "npm run update && npm run release && tnpm publish",
-    "pub:beta": "npm run update && npm run release -- --prerelease beta && tnpm publish --tag beta",
+    "pub": "npm run update && npm run release && npm publish --access public",
+    "pub:beta": "npm run update && npm run release -- --prerelease beta && npm publish --tag beta --access public",
     "release": "standard-version"
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.alibaba-inc.com:kaitian/textmate-languages.git"
+    "url": "https://github.com/opensumi/textmate-languages.git"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +26,7 @@
   ],
   "typings": "index.d.ts",
   "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.npmjs.org "
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.32",
