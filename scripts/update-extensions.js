@@ -12,7 +12,7 @@ const yauzl = require('yauzl')
 
 const api = 'https://open-vsx.org/api/'
 
-// 放置 kaitian extension 的目录
+// 放置 extension 的目录
 const targetDir = path.resolve(__dirname, '../extensions')
 
 const installExtension = async (namespace, name, version) => {

@@ -11,7 +11,7 @@ interface ILanguageDesc {
   extensionPackageName?: string;
 }
 
-declare module '@ali/kaitian-textmate-languages' {
+declare module '@opensumi/textmate-languages' {
   export type loadLanguageAndGrammar = (
     registerLanguage: (languageContribution: any, extPath: any) => Promise<void>,
     registerGrammar: (grammarContribution: any, extPath: any) => Promise<void>,
@@ -20,7 +20,7 @@ declare module '@ali/kaitian-textmate-languages' {
   export type LanguageDesc = ILanguageDesc
 }
 
-declare module '@ali/kaitian-textmate-languages/es/utils' {
+declare module '@opensumi/textmate-languages/es/utils' {
   export function getLanguageByExtnameAndFilename(extname: string, filename?: string): ILanguageDesc | undefined;
   export function getLanguageById(languageId: string): ILanguageDesc | undefined;
   /**
@@ -30,7 +30,7 @@ declare module '@ali/kaitian-textmate-languages/es/utils' {
   export function hasLanguageId(languageId: string): boolean;
 }
 
-declare module '@ali/kaitian-textmate-languages/lib/utils' {
+declare module '@opensumi/textmate-languages/lib/utils' {
   export function getLanguageByExtnameAndFilename(extname: string, filename?: string): ILanguageDesc | undefined;
   export function getLanguageById(languageId: string): ILanguageDesc | undefined;
   /**
