@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.1-beta.0](https://github.com/opensumi/textmate-languages/compare/v2.6.1...v2.7.1-beta.0) (2022-09-14)
+
 ### [2.6.1](https://github.com/opensumi/textmate-languages/compare/v2.6.0-beta.0...v2.6.1) (2021-12-17)
 
 ## 2.6.0-beta.0 (2021-12-06)

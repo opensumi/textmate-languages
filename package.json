@@ -1,6 +1,6 @@
 {
   "name": "@opensumi/textmate-languages",
-  "version": "2.6.1",
+  "version": "2.7.1-beta.0",
   "description": "",
   "main": "lib/loader.js",
   "module": "es/loader.js",
@@ -9,7 +9,7 @@
     "generate": "rm -rf lib && node scripts/generate.js",
     "update": "npm run download && npm run generate",
     "pub": "npm run update && npm run release && npm publish --access public",
-    "pub:beta": "npm run update && npm run release -- --prerelease beta && npm publish --tag beta --access public",
+    "pub:beta": "npm run release -- --prerelease beta && npm publish --tag beta --access public",
     "release": "standard-version"
   },
   "repository": {
