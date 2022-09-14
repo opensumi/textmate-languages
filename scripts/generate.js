@@ -18,11 +18,11 @@ const targetEsDir = path.resolve(__dirname, '../es')
 
 templateSettings.escape = false
 
-const ResolvedConfigFiled = 'resolvedConfiguration';
+const ResolvedConfigFiled = 'resolvedConfiguration'
 
 // format by prettier
 function pretty(content) {
-  return prettier.format(content, require('../.prettierrc'));
+  return prettier.format(content, require('../.prettierrc'))
 }
 
 class Extension {
@@ -110,7 +110,7 @@ class Extension {
 
     await bluebird.map(
       languages,
-      language => {
+      (language) => {
         if (!language.configuration) {
           this.collectLanguage(language)
           return
@@ -134,7 +134,7 @@ class Extension {
 
   collectLanguage(language) {
     // 因为上方执行了两次 collect contributes 因此做了一个去重
-    if (!this.desc.languages.find(n => n.id === language.id)) {
+    if (!this.desc.languages.find((n) => n.id === language.id)) {
       // 收集 language
       this.desc.languages.push(language)
     }
@@ -154,7 +154,7 @@ class Extension {
 
     await bluebird.map(
       grammars,
-      grammar => {
+      (grammar) => {
         if (grammar.path) {
           const targetFilename = path.basename(grammar.path)
 
@@ -176,14 +176,14 @@ class Extension {
   }
 
   async copyTextmateFiles(from, to) {
-    const ext = path.extname(from);
+    const ext = path.extname(from)
     switch (ext) {
       case '.json':
-        this.copyJSONFileWithoutComments(from, to);
-        break;
+        this.copyJSONFileWithoutComments(from, to)
+        break
       case '.tmLanguage':
-        this.convertTmFileToJson(from, to);
-        break;
+        this.convertTmFileToJson(from, to)
+        break
     }
   }
 
@@ -229,14 +229,8 @@ class Extension {
 
 async function copyDummyFiles(filename, content, esContent) {
   // generate `grammar-list.js`
-  await fse.writeFile(
-    path.resolve(targetDir, filename),
-    pretty(content),
-  )
-  await fse.writeFile(
-    path.resolve(targetEsDir, filename),
-    pretty(esContent),
-  )
+  await fse.writeFile(path.resolve(targetDir, filename), pretty(content))
+  await fse.writeFile(path.resolve(targetEsDir, filename), pretty(esContent))
 }
 
 /**
@@ -246,24 +240,23 @@ async function generateListFiles(extMetaList) {
   const languageList = []
   const grammarList = []
   // 将 language/grammar 收集
-  extMetaList
-    .forEach(extMeta => {
-      const { languages, grammars } = extMeta.toJSON()
-      const { name: extensionPackageName } = extMeta.pkgJson
-      for (const language of languages) {
-        languageList.push({
-          ...language,
-          extensionPackageName,
-        })
-      }
+  extMetaList.forEach((extMeta) => {
+    const { languages, grammars } = extMeta.toJSON()
+    const { name: extensionPackageName } = extMeta.pkgJson
+    for (const language of languages) {
+      languageList.push({
+        ...language,
+        extensionPackageName
+      })
+    }
 
-      for (const grammar of grammars) {
-        grammarList.push({
-          ...grammar,
-          extensionPackageName,
-        })
-      }
-    })
+    for (const grammar of grammars) {
+      grammarList.push({
+        ...grammar,
+        extensionPackageName
+      })
+    }
+  })
 
   // 排序
   languageList.sort((a, b) => a.id - b.id)
@@ -273,21 +266,27 @@ async function generateListFiles(extMetaList) {
   await copyDummyFiles(
     './language-list.js',
     `module.exports = ${JSON.stringify(languageList)}`,
-    `export default ${JSON.stringify(languageList)}`,
+    `export default ${JSON.stringify(languageList)}`
   )
 
   // generate `grammar-list.js`
   await copyDummyFiles(
     './grammar-list.js',
     `module.exports = ${JSON.stringify(grammarList)}`,
-    `export default ${JSON.stringify(grammarList)}`,
+    `export default ${JSON.stringify(grammarList)}`
   )
 
   // copy `util.js`
   await copyDummyFiles(
     './utils.js',
-    await fse.readFile(path.resolve(__dirname, './template/utils/index.js'), 'utf-8'),
-    await fse.readFile(path.resolve(__dirname, './template/utils/index-es.js'), 'utf-8'),
+    await fse.readFile(
+      path.resolve(__dirname, './template/utils/index.js'),
+      'utf-8'
+    ),
+    await fse.readFile(
+      path.resolve(__dirname, './template/utils/index-es.js'),
+      'utf-8'
+    )
   )
 }
 
@@ -299,8 +298,14 @@ async function generate() {
     // copy `loader.js`
     await copyDummyFiles(
       'loader.js',
-      await fse.readFile(path.resolve(__dirname, './template/loader/index.js'), 'utf-8'),
-      await fse.readFile(path.resolve(__dirname, './template/loader/index-es.js'), 'utf-8'),
+      await fse.readFile(
+        path.resolve(__dirname, './template/loader/index.js'),
+        'utf-8'
+      ),
+      await fse.readFile(
+        path.resolve(__dirname, './template/loader/index-es.js'),
+        'utf-8'
+      )
     )
 
     const extensionNames = await promisify(fs.readdir)(extensionsDir)
