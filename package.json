@@ -1,6 +1,6 @@
 {
   "name": "@opensumi/textmate-languages",
-  "version": "2.7.1-beta.0",
+  "version": "2.7.1",
   "description": "",
   "main": "lib/loader.js",
   "module": "es/loader.js",
