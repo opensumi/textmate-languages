@@ -44,34 +44,34 @@ const VSCODE_BUILTIN_EXTENSIONS = [
 
 module.exports = {
   extensions: {
-    vscode: [
-      {
-        name: 'vue',
-        version: '0.1.5'
-      },
-      {
-        name: 'acss',
-        version: '0.0.2'
-      },
-      {
-        name: 'schema',
-        version: '0.0.1'
-      },
-      {
-        name: 'velocity',
-        version: '0.7.1'
-      },
-      {
-        name: 'vscode-proto3',
-        version: '0.3.0'
-      },
+    fwcd: [
       {
         name: 'Kotlin',
-        version: '1.7.1'
-      },
+        version: '0.2.26'
+      }
+    ],
+    znck: [
       {
-        name: 'solidity',
-        version: '0.0.125'
+        name: 'vue',
+        version: '0.11.4'
+      }
+    ],
+    sodatea: [
+      {
+        name: 'velocity',
+        version: '0.2.0'
+      }
+    ],
+    zxh404: [
+      {
+        name: 'vscode-proto3',
+        version: '0.5.5'
+      }
+    ],
+    contractshark: [
+      {
+        name: 'solidity-lang',
+        version: '1.3.0'
       }
     ].concat(
       VSCODE_BUILTIN_EXTENSIONS.map(name => ({
