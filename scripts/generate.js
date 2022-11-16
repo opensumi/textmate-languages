@@ -41,6 +41,11 @@ class Extension {
     // 将 package.json 内容挂到 Extension 实例上
     this.pkgJson = extPkgJson
     await this.contributes(targetDir, false)
+
+    // 清理前一次的 grammars，否则会生成双份 grammar
+    this.desc.grammars = []
+    this.desc.languages = []
+
     await this.contributes(targetEsDir, true)
   }
 
@@ -49,8 +54,10 @@ class Extension {
     const extOutDir = path.join(outDir, this.pkgJson.name)
     await fse.ensureDir(extOutDir)
     // handle languages/grammars
-    await this.collectLanguages(this.pkgJson.contributes, extOutDir)
-    await this.collectGrammars(this.pkgJson.contributes, extOutDir)
+    await Promise.all([
+      this.collectLanguages(this.pkgJson.contributes, extOutDir),
+      this.collectGrammars(this.pkgJson.contributes, extOutDir)
+    ])
     await this.writeEntry(extOutDir, esMode)
   }
 
@@ -157,11 +164,13 @@ class Extension {
       (grammar) => {
         if (grammar.path) {
           const targetFilename = path.basename(grammar.path)
-
+          const extname = path.extname(grammar.path)
+          const distPath =
+            extname === '.json' ? targetFilename : targetFilename + '.json'
           // 收集 grammar 并将 path#string 转成 require 语法
           this.desc.grammars.push({
             ...grammar,
-            path: './syntaxes/' + targetFilename.trim()
+            path: './syntaxes/' + distPath
           })
           return this.copyTextmateFiles(
             path.resolve(this.extPath, grammar.path),
