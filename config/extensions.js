@@ -73,7 +73,14 @@ module.exports = {
         name: 'solidity-lang',
         version: '1.3.0'
       }
-    ].concat(
+    ],
+    jeandeaual: [
+      {
+        name: 'scheme',
+        version: '0.2.0'
+      }
+    ],
+    vscode: [].concat(
       VSCODE_BUILTIN_EXTENSIONS.map(name => ({
         name
       }))
