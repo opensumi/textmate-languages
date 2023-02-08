@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.7.2](https://github.com/opensumi/textmate-languages/compare/v2.6.1...v2.7.2) (2023-02-08)
+
+
+### Bug Fixes
+
+* 非vscode官方插件的openvsx迁移 ([69e2791](https://github.com/opensumi/textmate-languages/commit/69e279158923bb12fa42ce7f17d2d23f334b50e6))
+* duplicated gammars, update extension list ([#3](https://github.com/opensumi/textmate-languages/issues/3)) ([85d3829](https://github.com/opensumi/textmate-languages/commit/85d38292de11e1886bdebad6b337e41319ba75b2))
+
 ### [2.7.2-beta.0](https://github.com/opensumi/textmate-languages/compare/v2.6.1...v2.7.2-beta.0) (2022-09-22)
 
 
