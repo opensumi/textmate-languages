@@ -80,6 +80,18 @@ module.exports = {
         version: '0.2.0'
       }
     ],
+    'dan-c-underwood': [
+      {
+        name: 'arm',
+        version: '1.4.0'
+      }
+    ],
+    ZixuanWang: [
+      {
+        name: 'linkerscript',
+        version: '1.0.4'
+      }
+    ],
     vscode: [].concat(
       VSCODE_BUILTIN_EXTENSIONS.map(name => ({
         name
