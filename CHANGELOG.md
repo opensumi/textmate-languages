@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/opensumi/textmate-languages/compare/v2.7.2...v2.8.0) (2024-08-26)
+
+
+### Features
+
+* add kcl ([553d465](https://github.com/opensumi/textmate-languages/commit/553d465f9b06a745ca7d9cc350003bc5d0bb8582))
+* support arm and linkerscript ([f695f2f](https://github.com/opensumi/textmate-languages/commit/f695f2ff63b9e5c363d48c409085f4a2812dfdba))
+
+
+### Bug Fixes
+
+* missing deps `uuid` ([86d589c](https://github.com/opensumi/textmate-languages/commit/86d589c24fe989c9cce304d8f0242e99fd368154))
+
 ### [2.7.2](https://github.com/opensumi/textmate-languages/compare/v2.6.1...v2.7.2) (2023-02-08)
 
 
