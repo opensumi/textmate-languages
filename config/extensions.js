@@ -80,6 +80,12 @@ module.exports = {
         version: '0.2.0'
       }
     ],
+    kcl: [
+      {
+        name: 'kcl-vscode-extension',
+        version: '0.2.1'
+      }
+    ],
     'dan-c-underwood': [
       {
         name: 'arm',
